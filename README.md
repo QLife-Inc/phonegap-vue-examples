@@ -8,6 +8,7 @@ PhoneGap のアプリを Vue + TypeScript で実装するためのボイラー�
 ```bash
 npm install --global @vue/cli
 npm install
+npm run build
 npm run phonegap prepare
 ```
 

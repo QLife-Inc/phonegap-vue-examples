@@ -23,7 +23,9 @@ yarn-error.log*
 *.sln
 *.sw?
 
-/platforms
-/plugins
-/www
+/platforms/*
+/plugins/*
+/www/*
+!/platforms/.keep
+!/plugins/.keep
 !/www/.keep
