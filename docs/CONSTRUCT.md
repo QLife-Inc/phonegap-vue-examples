@@ -18,6 +18,7 @@ vue create phonegap-vue-examples
 ```
 
 `PWA` 以外をすべて選択、`Vue-Router` の `history` モードは無効に。あとはお好みで。
+`history` モードを無効にする理由は [後述](#ハマったこと) 。
 
 ```console
 Vue CLI v3.11.0
@@ -69,6 +70,8 @@ module.exports = {
   publicPath: ""
 };
 ```
+
+`publicPath` を空文字列にしている理由については [後述](#ハマったこと) 。
 
 `www` ディレクトリは Vue (webpack) によるビルドのたびに削除されるため、PhoneGap の実行に必要な静的ファイルを `public` 配下に移動しておく。
 
@@ -139,7 +142,7 @@ PhoneGap で実行するにあたり修正が必要なソース。
 
 #### src/router.ts
 
-webpack による動的インポート機能は使えないため、修正。
+webpack による動的インポート機能は [後述](#ハマったこと) の理由により使えないため、修正。
 
 ```diff
 @@ -1,6 +1,7 @@
@@ -255,6 +258,8 @@ Android SDK のダウンロードや必要なことはプロンプトで勝手�
 
 ### Android Studio インポート時のエラー
 
+`minSdkVersion` が見つからないみたいなエラーが出たら Android Studio の Quick fix で `Do Refactor` すれば OK。
+
 `Gradle sync failed: Could not find method leftShift() for arguments` と出た場合は `platforms/android/app/build.gradle` を以下の様に修正。
 
 ```diff
@@ -269,3 +274,28 @@ Android SDK のダウンロードや必要なことはプロンプトで勝手�
      println('cdvVersionCode=' + cdvVersionCode)
 ```
 
+## ハマったこと
+
+### Vue の publicPath がデフォルトの '/' だと iOS エミュレータでエラー
+
+iOS エミュレータの WebView はローカルファイルに対して `file://` プロトコルでアクセスするため、 `publicPath` が `/` だと `file://app.js` などと解決されてアクセスできず、何も表示されない。
+
+XCode でデバッグすると、 `NSURLConnection finished with error - code -1100` というエラーが出力されていることがわかる。
+
+そのため、`publicPath` には明示的に空文字(`""`)を指定する必要がある。
+
+> これの解決にほぼ丸一日かかった・・・。
+
+### Vue Router の history モードは使えない
+
+前述の通り、パスが `/` から始まるとエラーになることに加え、パスへの直アクセスなどをリダイレクトする仕組みがないため、`history` モードは利用できない。
+
+### cordova プラグインが動かない (初期化されていない)
+
+初期状態の `main.ts` では読み込まれた時点で Vue のルートコンポーネントをマウントする実装になっている。 cordova のプラグインなどはどうやら `deviceready` のタイミングで有効になるようなので、 `vue-cordova` が機能するためには Vue コンポーネントのマウントも `deviceready` を待ってからじゃないと動かないみたいだった。ソースまで追ってはいない。
+
+## TODO
+
+- push 通知とか
+- cordova プラグインによる native 機能呼び出し
+- vuetify vee-validate
