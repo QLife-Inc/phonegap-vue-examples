@@ -164,3 +164,37 @@ webpack による動的インポート機能は使えないため、修正。
    ]
  });
 ```
+
+## PhoneGap 動作確認
+
+予め `package.json` を整理しておく。
+
+```diff
+@@ -3,8 +3,8 @@
+   "version": "0.1.0",
+   "private": true,
+   "scripts": {
+-    "serve": "vue-cli-service serve",
+-    "build": "vue-cli-service build",
++    "serve": "phonegap serve",
++    "build": "vue-cli-service build --mode development",
++    "watch": "vue-cli-service build --watch --mode development",
++    "phonegap": "phonegap",
++    "cordova": "cordova",
+     "lint": "vue-cli-service lint",
+     "test:e2e": "vue-cli-service test:e2e",
+     "test:unit": "vue-cli-service test:unit"
+```
+
+### Web ブラウザでの確認
+
+まずはブラウザで動作確認。初回の `phonegap serve` 時にもろもろ必要なファイルがインストールされるため、エミュレータで実行する前にブラウザでの動作確認を推奨。
+
+```bash
+npm run build
+npm run phonegap platform add browser -- --save
+npm run serve
+```
+
+起動したらブラウザで http://localhost:3000/ にアクセスし、Vue の画面が表示されることを確認。
+
