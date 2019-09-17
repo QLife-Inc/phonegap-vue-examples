@@ -81,3 +81,86 @@ mv www/res public/
 > ちなみに、`www` ディレクトリがない状態 (ビルド実行中) で `phonegap serve` するとエラーになる。
 > かといって `build` コマンドに `--no-clean` フラグを付けるのもゴミが残ってエミュレータや実機での確認時にノイズとなるため、`www` がない状態での `serve` はしない、という決めにしておく。
 
+### ソースファイルの修正
+
+PhoneGap で実行するにあたり修正が必要なソース。
+
+#### public/index.html
+
+`meta` タグは `phonegap create` で作成したひな形に含まれる `index.html` に合わせる。ただし、`Content-Security-Policy` は開発時には邪魔なので、webpack ビルド時に `NODE_ENV` を見て出力を制御。
+
+`cordova.js` はプロジェクト上に存在しないが、`phonegap (cordova)` コマンドでビルドした際に `platforms` ディレクトリに自動出力される。
+
+```diff
+@@ -1,10 +1,11 @@
+ <!DOCTYPE html>
+-<html lang="en">
++<html lang="ja">
+   <head>
+      <meta charset="utf-8">
+-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
++    <meta name="format-detection" content="telephone=no" />
++    <meta name="msapplication-tap-highlight" content="no" />
++    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
++  <% if (NODE_ENV !== 'development') { %>
++    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" />
++  <% } %>
+     <title>phonegap-vue-examples</title>
+   </head>
+   <body>
+@@ -13,5 +14,6 @@
+     </noscript>
+     <div id="app"></div>
+     <!-- built files will be auto injected -->
++    <script type="text/javascript" src="cordova.js"></script>
+   </body>
+ </html>
+```
+
+#### src/main.ts
+
+`cordova` の初期化が完了してから Vue を初期化しないと `cordova` プラグインの関数を呼んだときに実行時エラーになるため順序制御。
+
+```diff
+@@ -5,8 +5,11 @@
+
+ Vue.config.productionTip = false;
+
++ document.addEventListener('deviceready', () => {
+    new Vue({
+      router,
+      store,
+      render: h => h(App)
+    }).$mount("#app");
++ });
+```
+
+#### src/router.ts
+
+webpack による動的インポート機能は使えないため、修正。
+
+```diff
+@@ -1,6 +1,7 @@
+ import Vue from "vue";
+ import Router from "vue-router";
+ import Home from "./views/Home.vue";
++import About from "./views/About.vue";
+
+ Vue.use(Router);
+
+@@ -14,11 +15,7 @@ export default new Router({
+     {
+       path: "/about",
+       name: "about",
+-      // route level code-splitting
+-      // this generates a separate chunk (about.[hash].js) for this route
+-      // which is lazy-loaded when the route is visited.
+-      component: () =>
+-        import(/* webpackChunkName: "about" */ "./views/About.vue")
++      component: About
+     }
+   ]
+ });
+```
