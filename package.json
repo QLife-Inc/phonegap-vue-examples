@@ -8,12 +8,14 @@
     "watch": "vue-cli-service build --watch --mode development",
     "phonegap": "phonegap",
     "cordova": "cordova",
+    "ios": "phonegap emulate ios --buildFlag='-UseModernBuildSystem=0'",
     "lint": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
     "cordova-browser": "5.0.4",
+    "cordova-ios": "4.5.5",
     "cordova-plugin-battery-status": "^1.2.5",
     "cordova-plugin-camera": "^2.4.1",
     "cordova-plugin-compat": "^1.2.0",
@@ -91,7 +93,8 @@
       "cordova-plugin-vibration": {}
     },
     "platforms": [
-      "browser"
+      "browser",
+      "ios"
     ]
   }
 }

@@ -198,3 +198,39 @@ npm run serve
 
 起動したらブラウザで http://localhost:3000/ にアクセスし、Vue の画面が表示されることを確認。
 
+### iOS エミュレータでの確認 (XCode 必須)
+
+#### iOS 用ソースファイルのコンパイル
+
+Corodva が生成する `platforms/ios` 配下のソース・ファイルは XCode の Modern Build に対応していないため、`-UseModernBuildSystem=0` オプションをつけないとビルドに失敗する。
+
+```bash
+npm run phonegap platform add ios -- --save
+npm run phonegap prepare ios
+npm run phonegap build ios -- --buildFlag='-UseModernBuildSystem=0'
+```
+
+#### iOS エミュレータ起動
+
+`package.json` を以下のように修正する。
+
+```diff
+@@ -8,12 +8,14 @@
+     "watch": "vue-cli-service build --watch --mode development",
+     "phonegap": "phonegap",
+     "cordova": "cordova",
++    "ios": "phonegap emulate ios --buildFlag='-UseModernBuildSystem=0'",
+     "lint": "vue-cli-service lint",
+     "test:e2e": "vue-cli-service test:e2e",
+     "test:unit": "vue-cli-service test:unit"
+   },
+```
+
+以下のコマンドを実行し、しばらく待つとエミュレータが起動して Vue の画面が表示される。
+
+```bash
+npm run ios
+```
+
+![iOS Emulator](./emulator-ios.png)
+
