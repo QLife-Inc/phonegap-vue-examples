@@ -234,3 +234,38 @@ npm run ios
 
 ![iOS Emulator](./emulator-ios.png)
 
+### Android エミュレータでの確認 (Android Studio 必須)
+
+以下のコマンドで必要なファイルをインストールする。
+
+```bash
+npm run phonegap platform add android -- --save
+npm run phonegap prepare android
+```
+
+コマンドの実行が完了したら Android Studio を起動し、`platforms/android` をプロジェクトとして Import する。
+
+Android SDK のダウンロードや必要なことはプロンプトで勝手に聞いてくれるため、適宜ダウンロードすると `gradle sync` が実行され、必要なパッケージが自動的にインストールされる。
+
+[Run] > [Run...] で `app` を実行するとエミュレータが起動し、しばらく待つと以下の画面が表示される。
+
+![Android Emulator](./emulator-android.png)
+
+## トラブルシューティング
+
+### Android Studio インポート時のエラー
+
+`Gradle sync failed: Could not find method leftShift() for arguments` と出た場合は `platforms/android/app/build.gradle` を以下の様に修正。
+
+```diff
+@@ -145,7 +145,7 @@
+     return computeBuildTargetName(false)
+ }
+
+-task cdvPrintProps << {
++task cdvPrintProps {
+     println('cdvCompileSdkVersion=' + cdvCompileSdkVersion)
+     println('cdvBuildToolsVersion=' + cdvBuildToolsVersion)
+     println('cdvVersionCode=' + cdvVersionCode)
+```
+

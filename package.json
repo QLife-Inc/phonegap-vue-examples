@@ -14,6 +14,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "cordova-android": "7.1.4",
     "cordova-browser": "5.0.4",
     "cordova-ios": "4.5.5",
     "cordova-plugin-battery-status": "^1.2.5",
@@ -94,6 +95,7 @@
     },
     "platforms": [
       "browser",
+      "android",
       "ios"
     ]
   }
