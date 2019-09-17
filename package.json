@@ -1,7 +1,6 @@
 {
-  "name": "vue-phonegap-boilerplate",
+  "name": "phonegap-vue-examples",
   "version": "0.1.0",
-  "private": true,
   "scripts": {
     "serve": "phonegap serve",
     "build": "vue-cli-service build --mode development",
