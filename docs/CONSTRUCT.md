@@ -57,3 +57,27 @@ $(npm bin)/phonegap create ./phonegap --id com.example --name VuePhonegap
 mv phonegap/config.xml phonegap/www ./
 rm -rf phonegap
 ```
+
+### Vue のパス設定を変更
+
+PhoneGap では `www` ディレクトリが Web のルートとなるため、Vue の設定を変更する。
+`vue.config.js` を作成し、以下の内容を記載。
+
+```javascript
+module.exports = {
+  outputDir: "www",
+  publicPath: ""
+};
+```
+
+`www` ディレクトリは Vue (webpack) によるビルドのたびに削除されるため、PhoneGap の実行に必要な静的ファイルを `public` 配下に移動しておく。
+
+スプラッシュスクリーンやアプリアイコンなどに利用するリソースファイルを `public` に移動。
+
+```bash
+mv www/res public/
+```
+
+> ちなみに、`www` ディレクトリがない状態 (ビルド実行中) で `phonegap serve` するとエラーになる。
+> かといって `build` コマンドに `--no-clean` フラグを付けるのもゴミが残ってエミュレータや実機での確認時にノイズとなるため、`www` がない状態での `serve` はしない、という決めにしておく。
+
