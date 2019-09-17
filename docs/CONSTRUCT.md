@@ -4,7 +4,7 @@
 
 - Node.js 10+
 - XCode 3.X (iOS を利用する場合)
-- Java 8+, Android SDK 19+ (Android を利用する場合)
+- Android Studio 3.X (Android を利用する場合)
 
 > `phonegap` コマンドを利用すると `npm` コマンドが実行されて `package-lock.json` が生成されるため、`yarn` は使わないほうがいい。
 
@@ -33,16 +33,27 @@ Vue CLI v3.11.0
 ? Pick a E2E testing solution: Nightwatch
 ? Where do you prefer placing config for Babel, PostCSS, ESLint, etc.? In dedicated config files
 ? Save this as a preset for future projects? Yes
-? Save preset as: vue-phonegap
+? Save preset as: phonegap-vue-examples
 ```
 
 ### Vue 動作確認
 
 ```bash
-cd vue-phonegap-boilerplate
+cd phonegap-vue-examples
 npm run serve
 ```
 
-ブラウザで http://localhost:8080/ にアクセスし、以下の画面が表示されることを確認。
+ブラウザで http://localhost:8080/ にアクセス。
+![Vue + TypeScript](./vue-ts.png)
 
-![./docs/construct-1.png](./docs/construct-1.png)
+### PhoneGap プロジェクト作成
+
+`PhoneGap CLI` でひな形を作成し、内容をプロジェクトルートにコピー。
+コピーしたらひな形のプロジェクトは削除する。
+
+```bash
+npm install --save-dev phonegap
+$(npm bin)/phonegap create ./phonegap --id com.example --name VuePhonegap
+mv phonegap/config.xml phonegap/www ./
+rm -rf phonegap
+```
