@@ -254,6 +254,27 @@ Android SDK のダウンロードや必要なことはプロンプトで勝手�
 
 ![Android Emulator](./emulator-android.png)
 
+## vuex-module-decorators
+
+Vuex を型安全にするための `vuex-module-decorators` を追加。
+
+```bash
+npm install --save-dev vuex-module-decorators
+```
+
+`store.ts` を以下のように修正。
+
+```typescript
+import Vue from "vue";
+import Vuex from "vuex";
+
+Vue.use(Vuex);
+
+export interface IRootState {}
+
+export default new Vuex.Store<IRootState>({});
+```
+
 ## トラブルシューティング
 
 ### Android Studio インポート時のエラー
