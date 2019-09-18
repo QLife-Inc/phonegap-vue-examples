@@ -262,7 +262,7 @@ Vuex を型安全にするための `vuex-module-decorators` を追加。
 npm install --save-dev vuex-module-decorators
 ```
 
-`store.ts` を以下のように修正。
+`src/store.ts` を以下のように修正。
 
 ```typescript
 import Vue from "vue";
@@ -274,6 +274,50 @@ export interface IRootState {}
 
 export default new Vuex.Store<IRootState>({});
 ```
+
+## vue-cordova
+
+入れ忘れてた vue-cordova を導入。
+
+```bash
+npm install --save vue-cordova
+```
+
+`src/shims-vue.d.ts` に module の定義追加。
+
+```diff
+@@ -2,3 +2,5 @@ declare module "*.vue" {
+   import Vue from "vue";
+   export default Vue;
+ }
++
++declare module "vue-cordova";
+```
+
+`src/main.ts` を修正。
+
+```diff
+@@ -2,9 +2,12 @@ import Vue from "vue";
+ import App from "@/App.vue";
+ import router from "@/router";
+ import store from "@/store";
++import VueCordova from "vue-cordova";
+ 
+ Vue.config.productionTip = false;
+ 
++Vue.use(VueCordova);
++
+```
+
+## cordova-plugin のサンプルを追加
+
+`phonegap prepare` 時点ですでにデフォルトのプラグインがインストールされているので、それらの利用サンプルを追加。
+追加・修正したファイルは以下の通り。
+
+- 追加: [src/shims-cordova.d.ts](../src/shims-cordova.d.ts): Cordova プラグインの型解決用
+- 追加: [src/stores/network.ts](../src/stores/network.ts): network プラグインのサンプル
+- 修正: [src/main.ts](../src/main.ts): online, offline の変更検知コード追加
+- 修正: [src/views/About.vue](../src/views/About.vue): plugin の利用サンプル追加
 
 ## トラブルシューティング
 
