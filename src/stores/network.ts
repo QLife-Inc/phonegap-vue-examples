@@ -14,7 +14,7 @@ export interface INetworkState {
 
 @Module({ dynamic: true, store, name: "network", namespaced: true })
 class NetworkStateModule extends VuexModule implements INetworkState {
-  private _online = navigator.connection.type !== Connection.NONE;
+  private _online = false;
 
   get online() {
     return this._online;
