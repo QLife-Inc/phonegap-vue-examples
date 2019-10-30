@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Node.js 10+
+- Node.js 12+
 - XCode 3.X (iOS を利用する場合)
 - Android Studio 3.X (Android を利用する場合)
 
@@ -208,7 +208,6 @@ npm run serve
 Corodva が生成する `platforms/ios` 配下のソース・ファイルは XCode の Modern Build に対応していないため、`-UseModernBuildSystem=0` オプションをつけないとビルドに失敗する。
 
 ```bash
-npm run phonegap platform add ios -- --save
 npm run phonegap prepare ios
 npm run phonegap build ios -- --buildFlag='-UseModernBuildSystem=0'
 ```
@@ -242,7 +241,6 @@ npm run ios
 以下のコマンドで必要なファイルをインストールする。
 
 ```bash
-npm run phonegap platform add android -- --save
 npm run phonegap prepare android
 ```
 
@@ -318,6 +316,12 @@ npm install --save vue-cordova
 - 追加: [src/stores/network.ts](../src/stores/network.ts): network プラグインのサンプル
 - 修正: [src/main.ts](../src/main.ts): online, offline の変更検知コード追加
 - 修正: [src/views/About.vue](../src/views/About.vue): plugin の利用サンプル追加
+
+## Upgrade to Vue CLI 4
+
+```bash
+`npm bin`/vue upgrade
+```
 
 ## トラブルシューティング
 
